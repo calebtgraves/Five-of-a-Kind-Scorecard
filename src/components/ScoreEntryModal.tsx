@@ -16,8 +16,10 @@ function FixedScoreModal({ categoryMeta, playerName, onConfirm, onCancel }: Scor
         class="bg-[#16213e] rounded-t-xl sm:rounded-xl p-6 w-full max-w-xs shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 class="text-lg font-semibold mb-1 text-center">{categoryMeta.label}</h3>
-        <p class="text-text-muted text-sm mb-6 text-center">{playerName}</p>
+        <h3 class="text-lg font-semibold text-center">{categoryMeta.label}</h3>
+        <p class="text-text-muted text-xs text-center">{categoryMeta.shortDescription}</p>
+        <p class="text-text-muted text-sm mt-2 text-center">{playerName}</p>
+        <p class="text-text-muted text-xs mt-1 mb-5 text-center">{categoryMeta.scoring}</p>
 
         <div class="flex gap-3">
           <button
@@ -58,8 +60,10 @@ export function ScoreEntryModal({ categoryMeta, playerName, onConfirm, onCancel 
         class="bg-[#16213e] rounded-t-xl sm:rounded-xl p-6 w-full max-w-xs shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
-        <h3 class="text-lg font-semibold mb-1 text-center">{categoryMeta.label}</h3>
-        <p class="text-text-muted text-sm mb-4 text-center">{playerName}</p>
+        <h3 class="text-lg font-semibold text-center">{categoryMeta.label}</h3>
+        <p class="text-text-muted text-xs text-center">{categoryMeta.shortDescription}</p>
+        <p class="text-text-muted text-sm mt-2 text-center">{playerName}</p>
+        <p class="text-text-muted text-xs mt-1 mb-3 text-center">{categoryMeta.scoring}</p>
 
         <div class="mb-4">
           <WheelPicker

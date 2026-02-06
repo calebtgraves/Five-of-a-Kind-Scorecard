@@ -26,7 +26,22 @@ export function WheelPicker({ values, value, onChange }: WheelPickerProps) {
   useEffect(() => {
     const index = values.indexOf(value);
     if (index >= 0) scrollToIndex(index, false);
-  }, []);
+
+    const el = containerRef.current;
+    if (!el) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const currentIndex = Math.round(el.scrollTop / ITEM_HEIGHT);
+      const direction = e.deltaY > 0 ? 1 : -1;
+      const nextIndex = Math.min(Math.max(currentIndex + direction, 0), values.length - 1);
+      el.scrollTo({ top: nextIndex * ITEM_HEIGHT, behavior: 'instant' });
+      onChange(values[nextIndex]);
+    };
+
+    el.addEventListener('wheel', handleWheel, { passive: false });
+    return () => el.removeEventListener('wheel', handleWheel);
+  }, [values.length]);
 
   const handleScroll = () => {
     const el = containerRef.current;
@@ -63,7 +78,7 @@ export function WheelPicker({ values, value, onChange }: WheelPickerProps) {
       {/* Scrollable list */}
       <div
         ref={containerRef}
-        class="h-full overflow-y-scroll"
+        class="h-full overflow-y-scroll scrollbar-none"
         style={{
           scrollSnapType: 'y mandatory',
           scrollPaddingTop: `${paddingItems * ITEM_HEIGHT}px`,

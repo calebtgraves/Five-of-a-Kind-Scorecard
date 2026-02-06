@@ -58,6 +58,8 @@ export interface ScoreEntryTarget {
 export interface CategoryMeta {
   key: ScoreCategory;
   label: string;
+  shortDescription: string;
+  scoring: string;
   section: 'upper' | 'lower';
   maxScore: number;
   validScores: number[];

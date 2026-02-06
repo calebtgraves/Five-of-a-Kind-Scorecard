@@ -9,27 +9,27 @@ function range(start: number, end: number): number[] {
 }
 
 export const CATEGORIES: CategoryMeta[] = [
-  // Upper section: 0 or multiples of face value
-  { key: 'ones',           label: 'Ones',            section: 'upper', maxScore: 5,  validScores: upperScores(1) },
-  { key: 'twos',           label: 'Twos',            section: 'upper', maxScore: 10, validScores: upperScores(2) },
-  { key: 'threes',         label: 'Threes',          section: 'upper', maxScore: 15, validScores: upperScores(3) },
-  { key: 'fours',          label: 'Fours',           section: 'upper', maxScore: 20, validScores: upperScores(4) },
-  { key: 'fives',          label: 'Fives',           section: 'upper', maxScore: 25, validScores: upperScores(5) },
-  { key: 'sixes',          label: 'Sixes',           section: 'upper', maxScore: 30, validScores: upperScores(6) },
-  // Lower section: sum-based or fixed
-  { key: 'threeOfAKind',   label: 'Three of a Kind', section: 'lower', maxScore: 30, validScores: [0, ...range(5, 30)] },
-  { key: 'fourOfAKind',    label: 'Four of a Kind',  section: 'lower', maxScore: 30, validScores: [0, ...range(5, 30)] },
-  { key: 'fullHouse',      label: 'Full House',      section: 'lower', maxScore: 25, validScores: [0, 25], fixedScore: true },
-  { key: 'smallStraight',  label: 'Small Straight',  section: 'lower', maxScore: 30, validScores: [0, 30], fixedScore: true },
-  { key: 'largeStraight',  label: 'Large Straight',  section: 'lower', maxScore: 40, validScores: [0, 40], fixedScore: true },
-  { key: 'yahtzee',        label: 'Yahtzee',         section: 'lower', maxScore: 50, validScores: [0, 50], fixedScore: true },
-  { key: 'chance',         label: 'Chance',          section: 'lower', maxScore: 30, validScores: [0, ...range(5, 30)] },
+  // Upper section
+  { key: 'ones',   label: 'Ones',   shortDescription: 'Sum of all 1s', scoring: 'Count and add only Ones.',   section: 'upper', maxScore: 5,  validScores: upperScores(1) },
+  { key: 'twos',   label: 'Twos',   shortDescription: 'Sum of all 2s', scoring: 'Count and add only Twos.',   section: 'upper', maxScore: 10, validScores: upperScores(2) },
+  { key: 'threes', label: 'Threes', shortDescription: 'Sum of all 3s', scoring: 'Count and add only Threes.', section: 'upper', maxScore: 15, validScores: upperScores(3) },
+  { key: 'fours',  label: 'Fours',  shortDescription: 'Sum of all 4s', scoring: 'Count and add only Fours.',  section: 'upper', maxScore: 20, validScores: upperScores(4) },
+  { key: 'fives',  label: 'Fives',  shortDescription: 'Sum of all 5s', scoring: 'Count and add only Fives.',  section: 'upper', maxScore: 25, validScores: upperScores(5) },
+  { key: 'sixes',  label: 'Sixes',  shortDescription: 'Sum of all 6s', scoring: 'Count and add only Sixes.',  section: 'upper', maxScore: 30, validScores: upperScores(6) },
+  // Lower section
+  { key: 'threeOfAKind',  label: 'Three of a Kind', shortDescription: '3 of the same',        scoring: 'At least three dice the same. Score the sum of all dice.',   section: 'lower', maxScore: 30, validScores: [0, ...range(5, 30)] },
+  { key: 'fourOfAKind',   label: 'Four of a Kind',  shortDescription: '4 of the same',        scoring: 'At least four dice the same. Score the sum of all dice.',    section: 'lower', maxScore: 30, validScores: [0, ...range(5, 30)] },
+  { key: 'fullHouse',     label: 'Full House',      shortDescription: '3 of one + 2 of another', scoring: 'Three of one number and two of another. Scores 25 points.',  section: 'lower', maxScore: 25, validScores: [0, 25], fixedScore: true },
+  { key: 'smallStraight', label: 'Small Straight',  shortDescription: '4 in a row',           scoring: 'Four sequential dice (e.g. 1-2-3-4). Scores 30 points.',    section: 'lower', maxScore: 30, validScores: [0, 30], fixedScore: true },
+  { key: 'largeStraight', label: 'Large Straight',  shortDescription: '5 in a row',           scoring: 'Five sequential dice (e.g. 1-2-3-4-5). Scores 40 points.',  section: 'lower', maxScore: 40, validScores: [0, 40], fixedScore: true },
+  { key: 'yahtzee',       label: 'Yahtzee',         shortDescription: '5 of a kind',          scoring: 'All five dice the same. Scores 50 points.',                  section: 'lower', maxScore: 50, validScores: [0, 50], fixedScore: true },
+  { key: 'chance',        label: 'Chance',           shortDescription: 'Any combination',      scoring: 'Any combination. Score the sum of all dice.',                section: 'lower', maxScore: 30, validScores: [0, ...range(5, 30)] },
 ];
 
 export const UPPER_CATEGORIES = CATEGORIES.filter(c => c.section === 'upper');
 export const LOWER_CATEGORIES = CATEGORIES.filter(c => c.section === 'lower');
 
 export const MIN_PLAYERS = 1;
-export const MAX_PLAYERS = 6;
+export const MAX_PLAYERS = 100;
 export const UPPER_BONUS_THRESHOLD = 63;
 export const UPPER_BONUS_VALUE = 35;
