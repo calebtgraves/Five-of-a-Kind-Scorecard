@@ -24,10 +24,11 @@ export function SetupScreen({ dispatch }: SetupScreenProps) {
 
   const startGame = () => {
     const players: Player[] = Array.from({ length: playerCount }, (_, i) => ({
-      id: crypto.randomUUID(),
+      id: Math.random().toString(36).slice(2) + Date.now().toString(36),
       name: names[i].trim() || `Player ${i + 1}`,
     }));
     dispatch({ type: 'START_GAME', players });
+    window.scrollTo(0, 0);
   };
 
   return (
