@@ -35,7 +35,7 @@ export function WheelPicker({ values, value, onChange }: WheelPickerProps) {
       const currentIndex = Math.round(el.scrollTop / ITEM_HEIGHT);
       const direction = e.deltaY > 0 ? 1 : -1;
       const nextIndex = Math.min(Math.max(currentIndex + direction, 0), values.length - 1);
-      el.scrollTo({ top: nextIndex * ITEM_HEIGHT, behavior: 'instant' });
+      el.scrollTo({ top: nextIndex * ITEM_HEIGHT, behavior: 'smooth' });
       onChange(values[nextIndex]);
     };
 
@@ -64,7 +64,7 @@ export function WheelPicker({ values, value, onChange }: WheelPickerProps) {
     <div class="relative" style={{ height: `${VISIBLE_ITEMS * ITEM_HEIGHT}px` }}>
       {/* Selection highlight */}
       <div
-        class="absolute left-0 right-0 border-y border-purple-500/50 bg-purple-600/10 pointer-events-none z-10"
+        class="absolute left-0 right-0 border-y border-accent-border bg-accent-subtle pointer-events-none z-10"
         style={{
           top: `${paddingItems * ITEM_HEIGHT}px`,
           height: `${ITEM_HEIGHT}px`,
@@ -72,8 +72,8 @@ export function WheelPicker({ values, value, onChange }: WheelPickerProps) {
       />
 
       {/* Fade edges */}
-      <div class="absolute inset-x-0 top-0 h-16 bg-linear-to-b from-[#16213e] to-transparent pointer-events-none z-10" />
-      <div class="absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-[#16213e] to-transparent pointer-events-none z-10" />
+      <div class="absolute inset-x-0 top-0 h-16 bg-linear-to-b from-surface to-transparent pointer-events-none z-10" />
+      <div class="absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-surface to-transparent pointer-events-none z-10" />
 
       {/* Scrollable list */}
       <div
@@ -98,7 +98,7 @@ export function WheelPicker({ values, value, onChange }: WheelPickerProps) {
             <div
               key={item}
               class={`flex items-center justify-center font-mono text-2xl transition-colors ${
-                isSelected ? 'text-white' : 'text-text-muted/50'
+                isSelected ? 'text-text' : 'text-text-muted/50'
               }`}
               style={{
                 height: `${ITEM_HEIGHT}px`,

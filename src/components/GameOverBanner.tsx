@@ -21,7 +21,7 @@ export function GameOverBanner({ players, scores, onNewGame }: GameOverBannerPro
   const isTie = totals.filter((t) => t.grandTotal === totals[winnerIndex].grandTotal).length > 1;
 
   return (
-    <div class="text-center py-6">
+    <div class="card p-6 text-center mb-4">
       <h2 class="text-2xl font-bold mb-2">
         {isTie ? "It's a tie!" : `${winner.name} wins!`}
       </h2>
@@ -33,7 +33,7 @@ export function GameOverBanner({ players, scores, onNewGame }: GameOverBannerPro
       </p>
       <button
         onClick={onNewGame}
-        class="bg-purple-600 hover:bg-purple-700 text-white rounded-lg px-8 py-3 text-lg transition-colors cursor-pointer"
+        class="bg-accent hover:bg-accent-hover text-on-accent rounded-lg px-8 py-3 text-lg transition-colors cursor-pointer"
       >
         New Game
       </button>

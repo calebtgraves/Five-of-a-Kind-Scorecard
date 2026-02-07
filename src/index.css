@@ -1,9 +1,119 @@
 @import "tailwindcss";
 
+/* ── Theme tokens registered for Tailwind utility generation ── */
 @theme {
-  --color-bg: #1a1a2e;
-  --color-text: #e0e0f0;
-  --color-text-muted: #a0a0b8;
+  --color-bg: var(--theme-bg);
+  --color-surface: var(--theme-surface);
+  --color-surface-alt: var(--theme-surface-alt);
+  --color-text: var(--theme-text);
+  --color-text-muted: var(--theme-text-muted);
+  --color-accent: var(--theme-accent);
+  --color-accent-hover: var(--theme-accent-hover);
+  --color-accent-muted: var(--theme-accent-muted);
+  --color-accent-subtle: var(--theme-accent-subtle);
+  --color-accent-border: var(--theme-accent-border);
+  --color-on-accent: var(--theme-on-accent);
+  --color-border: var(--theme-border);
+  --color-border-subtle: var(--theme-border-subtle);
+  --color-border-strong: var(--theme-border-strong);
+  --color-control: var(--theme-control);
+  --color-control-hover: var(--theme-control-hover);
+  --color-overlay: var(--theme-overlay);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.18), 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+/* ── Dark Vibrant (default — matches original look) ── */
+:root,
+[data-theme="dark-vibrant"] {
+  --theme-bg: #1a1a2e;
+  --theme-surface: #1e2245;
+  --theme-surface-alt: rgba(139, 92, 246, 0.06);
+  --theme-text: #e0e0f0;
+  --theme-text-muted: #a0a0b8;
+  --theme-accent: #8b5cf6;
+  --theme-accent-hover: #7c3aed;
+  --theme-accent-muted: rgba(139, 92, 246, 0.20);
+  --theme-accent-subtle: rgba(139, 92, 246, 0.10);
+  --theme-accent-border: rgba(139, 92, 246, 0.50);
+  --theme-on-accent: #ffffff;
+  --theme-border: rgba(255, 255, 255, 0.10);
+  --theme-border-subtle: rgba(255, 255, 255, 0.06);
+  --theme-border-strong: rgba(255, 255, 255, 0.18);
+  --theme-control: rgba(255, 255, 255, 0.10);
+  --theme-control-hover: rgba(255, 255, 255, 0.16);
+  --theme-overlay: rgba(0, 0, 0, 0.60);
+}
+
+/* ── Dark Warm ── */
+[data-theme="dark-warm"] {
+  --theme-bg: #1a1710;
+  --theme-surface: #262015;
+  --theme-surface-alt: rgba(217, 158, 46, 0.06);
+  --theme-text: #f0e6d0;
+  --theme-text-muted: #b8a88a;
+  --theme-accent: #d49e2e;
+  --theme-accent-hover: #b8870e;
+  --theme-accent-muted: rgba(212, 158, 46, 0.20);
+  --theme-accent-subtle: rgba(212, 158, 46, 0.10);
+  --theme-accent-border: rgba(212, 158, 46, 0.50);
+  --theme-on-accent: #1a1710;
+  --theme-border: rgba(255, 255, 255, 0.10);
+  --theme-border-subtle: rgba(255, 255, 255, 0.06);
+  --theme-border-strong: rgba(255, 255, 255, 0.18);
+  --theme-control: rgba(255, 255, 255, 0.10);
+  --theme-control-hover: rgba(255, 255, 255, 0.16);
+  --theme-overlay: rgba(0, 0, 0, 0.60);
+}
+
+/* ── Dark Cool ── */
+[data-theme="dark-cool"] {
+  --theme-bg: #0f1a1d;
+  --theme-surface: #152a30;
+  --theme-surface-alt: rgba(14, 180, 180, 0.06);
+  --theme-text: #d0f0ee;
+  --theme-text-muted: #7ab8b4;
+  --theme-accent: #0eb4b4;
+  --theme-accent-hover: #0c9696;
+  --theme-accent-muted: rgba(14, 180, 180, 0.20);
+  --theme-accent-subtle: rgba(14, 180, 180, 0.10);
+  --theme-accent-border: rgba(14, 180, 180, 0.50);
+  --theme-on-accent: #0f1a1d;
+  --theme-border: rgba(255, 255, 255, 0.10);
+  --theme-border-subtle: rgba(255, 255, 255, 0.06);
+  --theme-border-strong: rgba(255, 255, 255, 0.18);
+  --theme-control: rgba(255, 255, 255, 0.10);
+  --theme-control-hover: rgba(255, 255, 255, 0.16);
+  --theme-overlay: rgba(0, 0, 0, 0.60);
+}
+
+/* ── Light Soft ── */
+[data-theme="light-soft"] {
+  --theme-bg: #f5f3f0;
+  --theme-surface: #ffffff;
+  --theme-surface-alt: rgba(124, 92, 191, 0.05);
+  --theme-text: #2d2a33;
+  --theme-text-muted: #7a7580;
+  --theme-accent: #7c5cbf;
+  --theme-accent-hover: #6a4aad;
+  --theme-accent-muted: rgba(124, 92, 191, 0.14);
+  --theme-accent-subtle: rgba(124, 92, 191, 0.06);
+  --theme-accent-border: rgba(124, 92, 191, 0.40);
+  --theme-on-accent: #ffffff;
+  --theme-border: rgba(0, 0, 0, 0.10);
+  --theme-border-subtle: rgba(0, 0, 0, 0.06);
+  --theme-border-strong: rgba(0, 0, 0, 0.16);
+  --theme-control: rgba(0, 0, 0, 0.06);
+  --theme-control-hover: rgba(0, 0, 0, 0.10);
+  --theme-overlay: rgba(0, 0, 0, 0.40);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* ── Utility classes ── */
+.card {
+  background-color: var(--color-surface);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border-subtle);
 }
 
 .scrollbar-none {
@@ -16,7 +126,7 @@
 
 .scrollbar-subtle {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+  scrollbar-color: var(--color-border-strong) transparent;
 }
 .scrollbar-subtle::-webkit-scrollbar {
   height: 3px;
@@ -25,9 +135,33 @@
   background: transparent;
 }
 .scrollbar-subtle::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: var(--color-border-strong);
   border-radius: 2px;
 }
+
+.snap-x-mandatory {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-stop {
+  scroll-snap-stop: always;
+}
+
+.no-spin::-webkit-outer-spin-button,
+.no-spin::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spin {
+  -moz-appearance: textfield;
+}
+
 
 body {
   min-height: 100vh;

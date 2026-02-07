@@ -21,7 +21,7 @@ export function ScoreCell({ value, onTap, isGameOver }: ScoreCellProps) {
 
   return (
     <td
-      class="px-3 py-2 text-center cursor-pointer border border-dashed border-white/20 hover:bg-white/5 transition-colors"
+      class="px-3 py-2 text-center cursor-pointer border border-dashed border-border-strong hover:bg-surface-alt transition-colors"
       onClick={onTap}
     />
   );
