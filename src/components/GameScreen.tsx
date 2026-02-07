@@ -39,7 +39,10 @@ export function GameScreen({ state, dispatch }: GameScreenProps) {
     : '';
 
   return (
-    <div class="max-w-[98vw] sm:max-w-[90vw] mx-auto p-4">
+    <div
+      class="max-w-[98vw] sm:max-w-[90vw] mx-auto p-4"
+      style={{ paddingTop: 'calc(1rem + env(safe-area-inset-top))' }}
+    >
       {isGameOver && (
         <GameOverBanner
           players={state.players}

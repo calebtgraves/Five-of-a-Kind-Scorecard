@@ -43,7 +43,10 @@ export function SetupScreen({ dispatch, theme, setTheme }: SetupScreenProps) {
   };
 
   return (
-    <div class="h-screen overflow-hidden flex items-start justify-center p-4 pt-6">
+    <div
+      class="h-screen overflow-hidden flex items-start justify-center p-4"
+      style={{ paddingTop: 'calc(1.5rem + env(safe-area-inset-top))' }}
+    >
       <div
         class="fixed left-4 z-40"
         style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom))' }}
