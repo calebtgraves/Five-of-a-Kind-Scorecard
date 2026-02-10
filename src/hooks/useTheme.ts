@@ -2,7 +2,7 @@ import { useState, useEffect } from 'preact/hooks';
 
 export type ThemeId = 'dark-warm' | 'dark-cool' | 'dark-vibrant' | 'light-soft';
 
-const THEME_KEY = 'yahtzee-theme';
+const THEME_KEY = 'five-of-a-kind-theme';
 const DEFAULT_THEME: ThemeId = 'dark-vibrant';
 
 export const THEMES: { id: ThemeId; label: string; preview: string }[] = [
@@ -12,7 +12,7 @@ export const THEMES: { id: ThemeId; label: string; preview: string }[] = [
   { id: 'light-soft',   label: 'Light',   preview: '#f5f3f0' },
 ];
 
-const META_COLORS: Record<ThemeId, string> = {
+export const THEME_COLORS: Record<ThemeId, string> = {
   'dark-warm':    '#1a1710',
   'dark-cool':    '#0f1a1d',
   'dark-vibrant': '#1a1a2e',
@@ -30,7 +30,7 @@ function getStoredTheme(): ThemeId {
 function applyTheme(id: ThemeId) {
   document.documentElement.dataset.theme = id;
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute('content', META_COLORS[id]);
+  if (meta) meta.setAttribute('content', THEME_COLORS[id]);
 }
 
 export function useTheme() {

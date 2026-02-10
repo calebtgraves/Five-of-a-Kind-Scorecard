@@ -215,7 +215,7 @@ export function Scorecard({ players, scores, isGameOver, onCellTap }: ScorecardP
   return (
     <div>
       {showTabs && (
-        <div class="sticky top-0 z-20 py-2 -mx-2 px-2">
+        <div class="sticky top-0 z-20 py-2 -mx-2 px-2 bg-bg">
           <div ref={tabsRef} class="flex gap-1 overflow-x-auto scrollbar-none">
             {players.map((p, i) => (
               <button

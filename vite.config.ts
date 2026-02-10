@@ -10,9 +10,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'Yahtzee Tracker',
-        short_name: 'Yahtzee',
-        description: 'Track your Yahtzee scores',
+        name: 'Five-of-a-Kind Scorecard',
+        short_name: 'Five-of-a-Kind',
+        description: 'Track your Five-of-a-Kind scores',
         theme_color: '#1a1a2e',
         background_color: '#1a1a2e',
         display: 'standalone',

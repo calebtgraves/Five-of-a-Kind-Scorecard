@@ -1,5 +1,5 @@
 {
-  "name": "yahtzee-app",
+  "name": "five-of-a-kind-app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,9 +13,13 @@
   },
   "dependencies": {
     "@capacitor/android": "^8.0.2",
+    "@capacitor/app": "^8.0.0",
     "@capacitor/cli": "^8.0.2",
     "@capacitor/core": "^8.0.2",
     "@capacitor/ios": "^8.0.2",
+    "@capacitor/keyboard": "^8.0.0",
+    "@capacitor/status-bar": "^8.0.0",
+    "@capawesome/capacitor-android-edge-to-edge-support": "^8.0.5",
     "preact": "^10.27.2"
   },
   "devDependencies": {

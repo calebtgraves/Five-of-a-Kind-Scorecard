@@ -7,7 +7,7 @@ const UPPER_KEYS: UpperCategory[] = [
 
 const LOWER_KEYS: LowerCategory[] = [
   'threeOfAKind', 'fourOfAKind', 'fullHouse',
-  'smallStraight', 'largeStraight', 'yahtzee', 'chance',
+  'smallStraight', 'largeStraight', 'fiveOfAKind', 'chance',
 ];
 
 export function computeTotals(categories: CategoryScores): PlayerTotals {

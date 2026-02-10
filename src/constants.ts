@@ -22,7 +22,7 @@ export const CATEGORIES: CategoryMeta[] = [
   { key: 'fullHouse',     label: 'Full House',      shortDescription: '3 + 2 of a kind', scoring: 'Three of one number and two of another. Scores 25 points.',  section: 'lower', maxScore: 25, validScores: [0, 25], fixedScore: true },
   { key: 'smallStraight', label: 'Small Straight',  shortDescription: '4 in a row',           scoring: 'Four sequential dice (e.g. 1-2-3-4). Scores 30 points.',    section: 'lower', maxScore: 30, validScores: [0, 30], fixedScore: true },
   { key: 'largeStraight', label: 'Large Straight',  shortDescription: '5 in a row',           scoring: 'Five sequential dice (e.g. 1-2-3-4-5). Scores 40 points.',  section: 'lower', maxScore: 40, validScores: [0, 40], fixedScore: true },
-  { key: 'yahtzee',       label: 'Yahtzee',         shortDescription: '5 of a kind',          scoring: 'All five dice the same. Scores 50 points.',                  section: 'lower', maxScore: 50, validScores: [0, 50], fixedScore: true },
+  { key: 'fiveOfAKind',   label: 'Five of a Kind',  shortDescription: '5 of a kind',          scoring: 'All five dice the same. Scores 50 points.',                  section: 'lower', maxScore: 50, validScores: [0, 50], fixedScore: true },
   { key: 'chance',        label: 'Chance',           shortDescription: 'Any combination',      scoring: 'Any combination. Score the sum of all dice.',                section: 'lower', maxScore: 30, validScores: [0, ...range(5, 30)] },
 ];
 

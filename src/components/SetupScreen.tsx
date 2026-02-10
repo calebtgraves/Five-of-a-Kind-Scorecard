@@ -55,7 +55,7 @@ export function SetupScreen({ dispatch, theme, setTheme }: SetupScreenProps) {
       </div>
 
       <div class="card p-6 w-full max-w-sm h-[80vh] flex flex-col">
-        <h1 class="text-3xl font-bold text-center mb-8 tracking-tight">Yahtzee Tracker</h1>
+        <h1 class="text-3xl font-bold text-center mb-8 tracking-tight">Five-of-a-Kind Scorecard</h1>
 
         <label class="block text-sm text-text-muted mb-2 text-center">Number of Players</label>
         <div class="flex items-center justify-center gap-4 mb-6">

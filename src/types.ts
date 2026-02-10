@@ -12,7 +12,7 @@ export type LowerCategory =
   | 'fullHouse'
   | 'smallStraight'
   | 'largeStraight'
-  | 'yahtzee'
+  | 'fiveOfAKind'
   | 'chance';
 
 export type ScoreCategory = UpperCategory | LowerCategory;

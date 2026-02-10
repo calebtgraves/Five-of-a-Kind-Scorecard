@@ -3,7 +3,7 @@ import type { GameState, GameAction, CategoryScores, ScoreCategory } from '../ty
 const ALL_CATEGORIES: ScoreCategory[] = [
   'ones', 'twos', 'threes', 'fours', 'fives', 'sixes',
   'threeOfAKind', 'fourOfAKind', 'fullHouse',
-  'smallStraight', 'largeStraight', 'yahtzee', 'chance',
+  'smallStraight', 'largeStraight', 'fiveOfAKind', 'chance',
 ];
 
 function createEmptyScores(): CategoryScores {

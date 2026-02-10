@@ -1,12 +1,18 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.yahtzee.tracker',
-  appName: 'Yahtzee Tracker',
+  appId: 'com.fiveofakind.scorecard',
+  appName: 'Five-of-a-Kind Scorecard',
   webDir: 'dist',
+  android: {
+    allowMixedContent: false,
+    webContentsDebuggingEnabled: false
+  },
   plugins: {
     StatusBar: {
-      overlaysWebView: false
+      overlaysWebView: false,
+      style: 'DARK',
+      backgroundColor: '#1a1a2e'
     }
   }
 };
