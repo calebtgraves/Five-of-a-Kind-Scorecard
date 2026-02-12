@@ -165,10 +165,13 @@ export function GameScreen({ state, dispatch, onUndo, canUndo, undoHighlight, cl
       />
 
       {canUndo && (
-        <div class="flex justify-center mt-4">
+        <div
+          class="flex justify-center mt-4 sm:fixed sm:right-4 sm:mt-0 sm:z-40"
+          style={{ top: 'calc(1rem + env(safe-area-inset-top))' }}
+        >
           <button
             onClick={onUndo}
-            class="flex items-center gap-2 bg-control hover:bg-control-hover rounded-lg px-4 py-2 text-sm text-text-muted transition-colors cursor-pointer"
+            class="flex items-center gap-2 bg-control hover:bg-control-hover rounded-lg px-4 py-2 text-sm text-text-muted transition-colors cursor-pointer sm:shadow-card"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="1 4 1 10 7 10" />

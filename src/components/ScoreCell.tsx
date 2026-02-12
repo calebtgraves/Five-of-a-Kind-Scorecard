@@ -33,6 +33,12 @@ export function ScoreCell({ value, onTap, isGameOver, reTappable, highlighted, u
     );
   }
 
+  if (undoHighlighted) {
+    return (
+      <td class="px-3 py-2 text-center bg-accent-muted" />
+    );
+  }
+
   if (isGameOver) {
     return (
       <td class="px-3 py-2 text-center text-text-muted">—</td>

@@ -206,14 +206,13 @@
   -moz-appearance: textfield;
 }
 
-@keyframes undo-blink {
-  0%, 100% { background-color: var(--color-accent-muted); }
-  40%, 60% { background-color: transparent; }
+@keyframes undo-glow {
+  from { background-color: transparent; }
+  to { background-color: var(--color-accent-muted); }
 }
 
 .undo-flash {
-  animation: undo-blink 0.5s ease-in-out;
-  background-color: var(--color-accent-muted);
+  animation: undo-glow 0.5s ease-out forwards;
 }
 
 body {
