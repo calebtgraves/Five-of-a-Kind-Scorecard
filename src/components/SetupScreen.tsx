@@ -40,10 +40,10 @@ export function SetupScreen({ dispatch }: SetupScreenProps) {
 
   return (
     <div
-      class="h-screen overflow-hidden flex items-start justify-center p-4"
+      class="min-h-dvh flex items-start justify-center p-4"
       style={{ paddingTop: 'calc(1.5rem + env(safe-area-inset-top))' }}
     >
-      <div class="card p-6 w-full max-w-sm h-[80vh] flex flex-col">
+      <div class="card p-6 w-full max-w-sm">
         <h1 class="text-3xl font-bold text-center mb-8 tracking-tight">Five-of-a-Kind Scorecard</h1>
 
         <label class="block text-sm text-text-muted mb-2 text-center">Number of Players</label>
@@ -78,7 +78,7 @@ export function SetupScreen({ dispatch }: SetupScreenProps) {
           </button>
         </div>
 
-        <div class="space-y-3 mb-8 flex-1 overflow-y-auto min-h-0 pr-1">
+        <div class="space-y-3 mb-8">
           {Array.from({ length: playerCount }, (_, i) => (
             <input
               key={i}

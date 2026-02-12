@@ -9,7 +9,7 @@ export type ThemeId =
   | 'light-cool';
 
 const THEME_KEY = 'five-of-a-kind-theme';
-const DEFAULT_THEME: ThemeId = 'dark-vibrant';
+const DEFAULT_THEME: ThemeId = 'light-soft';
 
 export const THEMES: { id: ThemeId; label: string; bg: string; accent: string }[] = [
   { id: 'dark-warm',    label: 'Warm',    bg: '#1a1710', accent: '#d49e2e' },

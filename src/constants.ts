@@ -29,6 +29,9 @@ export const CATEGORIES: CategoryMeta[] = [
 export const UPPER_CATEGORIES = CATEGORIES.filter(c => c.section === 'upper');
 export const LOWER_CATEGORIES = CATEGORIES.filter(c => c.section === 'lower');
 
+/** Categories that can't be scored with 5 identical dice (used during bonus placement) */
+export const BONUS_INVALID_CATEGORIES: Set<string> = new Set(['fullHouse', 'smallStraight', 'largeStraight']);
+
 export const MIN_PLAYERS = 1;
 export const MAX_PLAYERS = 100;
 export const UPPER_BONUS_THRESHOLD = 63;

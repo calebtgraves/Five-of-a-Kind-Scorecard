@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'preact/hooks';
 import { useState } from 'preact/hooks';
 import type { Player, PlayerScores, ScoreCategory, ScoreEntryTarget } from '../types';
-import { UPPER_CATEGORIES, LOWER_CATEGORIES } from '../constants';
+import { UPPER_CATEGORIES, LOWER_CATEGORIES, BONUS_INVALID_CATEGORIES } from '../constants';
 import { computeTotals, FIVE_OF_A_KIND_BONUS_VALUE } from '../state/computeTotals';
 import { ScoreCell } from './ScoreCell';
 
@@ -59,7 +59,7 @@ function ScoreTable({
                 value={ps.categories[cat.key]}
                 onTap={() => onCellTap(players[i].id, cat.key)}
                 isGameOver={isGameOver}
-                highlighted={bonusPlayerId === players[i].id && ps.categories[cat.key] === null}
+                highlighted={bonusPlayerId === players[i].id && ps.categories[cat.key] === null && !BONUS_INVALID_CATEGORIES.has(cat.key)}
                 undoHighlighted={undoTarget?.playerId === players[i].id && undoTarget?.category === cat.key}
               />
             ))}
@@ -85,7 +85,7 @@ function ScoreTable({
                     onTap={() => onCellTap(players[i].id, cat.key)}
                     isGameOver={isGameOver}
                     reTappable={isFiveOfAKind && ps.categories.fiveOfAKind === 50}
-                    highlighted={bonusPlayerId === players[i].id && ps.categories[cat.key] === null}
+                    highlighted={bonusPlayerId === players[i].id && ps.categories[cat.key] === null && !BONUS_INVALID_CATEGORIES.has(cat.key)}
                     undoHighlighted={undoTarget?.playerId === players[i].id && undoTarget?.category === cat.key}
                   />
                 ))}

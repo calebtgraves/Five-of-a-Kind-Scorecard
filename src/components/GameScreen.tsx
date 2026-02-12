@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
 import type { GameState, GameAction, ScoreEntryTarget, ScoreCategory } from '../types';
-import { CATEGORIES } from '../constants';
+import { CATEGORIES, BONUS_INVALID_CATEGORIES } from '../constants';
 import { Scorecard } from './Scorecard';
 import { ScoreEntryModal } from './ScoreEntryModal';
 import { GameOverBanner } from './GameOverBanner';
@@ -90,9 +90,10 @@ export function GameScreen({ state, dispatch, onUndo, canUndo, undoHighlight, cl
       }
     }
 
-    // If in bonus placement mode, only allow unfilled categories for the bonus player
+    // If in bonus placement mode, only allow valid unfilled categories for the bonus player
     if (bonusPlayerId) {
       if (playerId !== bonusPlayerId) return;
+      if (BONUS_INVALID_CATEGORIES.has(category)) return;
       const ps = state.scores.find((s) => s.playerId === playerId);
       if (ps && ps.categories[category] !== null) return;
     }
@@ -130,9 +131,20 @@ export function GameScreen({ state, dispatch, onUndo, canUndo, undoHighlight, cl
     ? state.players.find((p) => p.id === bonusConfirmPlayerId)?.name ?? ''
     : '';
 
-  const categoryMeta = entryTarget
+  const baseMeta = entryTarget
     ? CATEGORIES.find((c) => c.key === entryTarget.category)!
     : null;
+
+  // Override valid scores during bonus Five-of-a-Kind placement
+  const categoryMeta = baseMeta && bonusPlayerId
+    ? {
+        ...baseMeta,
+        validScores: baseMeta.section === 'upper'
+          ? [baseMeta.maxScore]
+          : [5, 10, 15, 20, 25, 30],
+        fixedScore: false,
+      }
+    : baseMeta;
 
   const playerName = entryTarget
     ? state.players.find((p) => p.id === entryTarget.playerId)?.name ?? ''
