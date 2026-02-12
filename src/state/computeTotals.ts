@@ -10,7 +10,9 @@ const LOWER_KEYS: LowerCategory[] = [
   'smallStraight', 'largeStraight', 'fiveOfAKind', 'chance',
 ];
 
-export function computeTotals(categories: CategoryScores): PlayerTotals {
+export const FIVE_OF_A_KIND_BONUS_VALUE = 100;
+
+export function computeTotals(categories: CategoryScores, fiveOfAKindBonusCount = 0): PlayerTotals {
   const upperSubtotal = UPPER_KEYS.reduce(
     (sum, key) => sum + (categories[key] ?? 0), 0
   );
@@ -19,11 +21,13 @@ export function computeTotals(categories: CategoryScores): PlayerTotals {
   const lowerTotal = LOWER_KEYS.reduce(
     (sum, key) => sum + (categories[key] ?? 0), 0
   );
+  const fiveOfAKindBonus = fiveOfAKindBonusCount * FIVE_OF_A_KIND_BONUS_VALUE;
   return {
     upperSubtotal,
     upperBonus,
     upperTotal,
     lowerTotal,
-    grandTotal: upperTotal + lowerTotal,
+    fiveOfAKindBonus,
+    grandTotal: upperTotal + lowerTotal + fiveOfAKindBonus,
   };
 }

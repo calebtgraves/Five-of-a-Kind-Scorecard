@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'preact/hooks';
 import { useState } from 'preact/hooks';
 import type { Player, PlayerScores, ScoreCategory } from '../types';
 import { UPPER_CATEGORIES, LOWER_CATEGORIES } from '../constants';
-import { computeTotals } from '../state/computeTotals';
+import { computeTotals, FIVE_OF_A_KIND_BONUS_VALUE } from '../state/computeTotals';
 import { ScoreCell } from './ScoreCell';
 
 const CAT_COL = 'min-w-32 sm:max-w-48 px-3';
@@ -14,6 +14,7 @@ interface ScorecardProps {
   scores: PlayerScores[];
   isGameOver: boolean;
   onCellTap: (playerId: string, category: ScoreCategory) => void;
+  bonusPlayerId: string | null;
 }
 
 function ScoreTable({
@@ -22,12 +23,14 @@ function ScoreTable({
   totals,
   isGameOver,
   onCellTap,
+  bonusPlayerId,
 }: {
   players: Player[];
   scores: PlayerScores[];
   totals: ReturnType<typeof computeTotals>[];
   isGameOver: boolean;
   onCellTap: (playerId: string, category: ScoreCategory) => void;
+  bonusPlayerId: string | null;
 }) {
   return (
     <table class={`border-collapse text-sm ${players.length > 1 ? 'w-full' : ''}`}>
@@ -52,6 +55,7 @@ function ScoreTable({
                 value={ps.categories[cat.key]}
                 onTap={() => onCellTap(players[i].id, cat.key)}
                 isGameOver={isGameOver}
+                highlighted={bonusPlayerId === players[i].id && ps.categories[cat.key] === null}
               />
             ))}
           </tr>
@@ -61,22 +65,50 @@ function ScoreTable({
         <TotalRow label="Upper Total" values={totals.map((t) => t.upperTotal)} />
 
         <SectionHeader label="Lower Section" playerCount={players.length} />
-        {LOWER_CATEGORIES.map((cat) => (
-          <tr class="border-b border-border-subtle">
-            <td class={`${CAT_COL} py-3 sticky left-0 bg-surface z-10`}>
-              <div>{cat.label}</div>
-              <div class="text-xs text-text-muted">{cat.shortDescription}</div>
-            </td>
-            {scores.map((ps, i) => (
-              <ScoreCell
-                value={ps.categories[cat.key]}
-                onTap={() => onCellTap(players[i].id, cat.key)}
-                isGameOver={isGameOver}
-              />
-            ))}
-          </tr>
-        ))}
+        {LOWER_CATEGORIES.map((cat) => {
+          const isFiveOfAKind = cat.key === 'fiveOfAKind';
+          return (
+            <>
+              <tr class="border-b border-border-subtle">
+                <td class={`${CAT_COL} py-3 sticky left-0 bg-surface z-10`}>
+                  <div>{cat.label}</div>
+                  <div class="text-xs text-text-muted">{cat.shortDescription}</div>
+                </td>
+                {scores.map((ps, i) => (
+                  <ScoreCell
+                    value={ps.categories[cat.key]}
+                    onTap={() => onCellTap(players[i].id, cat.key)}
+                    isGameOver={isGameOver}
+                    reTappable={isFiveOfAKind && ps.categories.fiveOfAKind === 50}
+                    highlighted={bonusPlayerId === players[i].id && ps.categories[cat.key] === null}
+                  />
+                ))}
+              </tr>
+              {isFiveOfAKind && (
+                <tr class="border-b border-border-subtle">
+                  <td class={`${CAT_COL} py-1.5 text-xs text-text-muted sticky left-0 bg-surface z-10`}>
+                    Bonus (+{FIVE_OF_A_KIND_BONUS_VALUE} ea.)
+                  </td>
+                  {scores.map((ps) => (
+                    <td class="px-3 py-1.5 text-center text-xs">
+                      {ps.fiveOfAKindBonusCount > 0 ? (
+                        <span class="text-accent font-mono">
+                          {'✓ '.repeat(ps.fiveOfAKindBonusCount).trim()}
+                        </span>
+                      ) : (
+                        <span class="text-text-muted">—</span>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              )}
+            </>
+          );
+        })}
         <TotalRow label="Lower Total" values={totals.map((t) => t.lowerTotal)} />
+        {totals.some((t) => t.fiveOfAKindBonus > 0) && (
+          <TotalRow label="5-of-a-Kind Bonus" values={totals.map((t) => t.fiveOfAKindBonus)} />
+        )}
         <TotalRow label="Grand Total" values={totals.map((t) => t.grandTotal)} highlight />
       </tbody>
     </table>
@@ -126,14 +158,14 @@ function useIsMobile() {
   return isMobile;
 }
 
-export function Scorecard({ players, scores, isGameOver, onCellTap }: ScorecardProps) {
+export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerId }: ScorecardProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const scrollRaf = useRef(0);
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState(0);
-  const totals = scores.map((ps) => computeTotals(ps.categories));
+  const totals = scores.map((ps) => computeTotals(ps.categories, ps.fiveOfAKindBonusCount));
 
   const showTabs = isMobile && players.length > 1;
 
@@ -253,6 +285,7 @@ export function Scorecard({ players, scores, isGameOver, onCellTap }: ScorecardP
                   totals={[totals[i]]}
                   isGameOver={isGameOver}
                   onCellTap={onCellTap}
+                  bonusPlayerId={bonusPlayerId}
                 />
               </div>
             </div>
@@ -267,6 +300,7 @@ export function Scorecard({ players, scores, isGameOver, onCellTap }: ScorecardP
               totals={visibleTotals}
               isGameOver={isGameOver}
               onCellTap={onCellTap}
+              bonusPlayerId={bonusPlayerId}
             />
           </div>
         </div>

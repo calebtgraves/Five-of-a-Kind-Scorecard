@@ -1,8 +1,9 @@
 import { useReducer, useEffect, useRef } from 'preact/hooks';
 import { gameReducer, initialGameState } from './state/gameReducer';
-import { useTheme, THEME_COLORS } from './hooks/useTheme';
+import { useTheme, THEME_COLORS, isLightTheme } from './hooks/useTheme';
 import { SetupScreen } from './components/SetupScreen';
 import { GameScreen } from './components/GameScreen';
+import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 import { Capacitor } from '@capacitor/core';
@@ -28,7 +29,7 @@ export function App() {
     if (!Capacitor.isNativePlatform()) return;
 
     const themeColor = THEME_COLORS[theme];
-    const isLightTheme = theme === 'light-soft';
+    const isLight = isLightTheme(theme);
 
     // Update colors for Android
     if (Capacitor.getPlatform() === 'android') {
@@ -37,7 +38,7 @@ export function App() {
     }
 
     // Update status bar style (dark icons for light theme, light icons for dark themes)
-    StatusBar.setStyle({ style: isLightTheme ? Style.Light : Style.Dark });
+    StatusBar.setStyle({ style: isLight ? Style.Light : Style.Dark });
   }, [theme]);
 
   // Handle Android back button
@@ -87,7 +88,17 @@ export function App() {
   }, [state.phase]);
 
   if (state.phase === 'setup') {
-    return <SetupScreen dispatch={dispatch} theme={theme} setTheme={setTheme} />;
+    return (
+      <>
+        <div
+          class="fixed left-4 z-40"
+          style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom))' }}
+        >
+          <ThemeSwitcher theme={theme} setTheme={setTheme} />
+        </div>
+        <SetupScreen dispatch={dispatch} />
+      </>
+    );
   }
 
   return <GameScreen state={state} dispatch={dispatch} />;

@@ -1,16 +1,12 @@
 import { useState } from 'preact/hooks';
 import type { Player, GameAction } from '../types';
-import type { ThemeId } from '../hooks/useTheme';
 import { MIN_PLAYERS, MAX_PLAYERS } from '../constants';
-import { ThemeSwitcher } from './ThemeSwitcher';
 
 interface SetupScreenProps {
   dispatch: (action: GameAction) => void;
-  theme: ThemeId;
-  setTheme: (id: ThemeId) => void;
 }
 
-export function SetupScreen({ dispatch, theme, setTheme }: SetupScreenProps) {
+export function SetupScreen({ dispatch }: SetupScreenProps) {
   const [playerCount, setPlayerCount] = useState(2);
   const [playerCountInput, setPlayerCountInput] = useState('2');
   const [names, setNames] = useState<string[]>(Array(MAX_PLAYERS).fill(''));
@@ -47,13 +43,6 @@ export function SetupScreen({ dispatch, theme, setTheme }: SetupScreenProps) {
       class="h-screen overflow-hidden flex items-start justify-center p-4"
       style={{ paddingTop: 'calc(1.5rem + env(safe-area-inset-top))' }}
     >
-      <div
-        class="fixed left-4 z-40"
-        style={{ bottom: 'calc(1rem + env(safe-area-inset-bottom))' }}
-      >
-        <ThemeSwitcher theme={theme} setTheme={setTheme} />
-      </div>
-
       <div class="card p-6 w-full max-w-sm h-[80vh] flex flex-col">
         <h1 class="text-3xl font-bold text-center mb-8 tracking-tight">Five-of-a-Kind Scorecard</h1>
 

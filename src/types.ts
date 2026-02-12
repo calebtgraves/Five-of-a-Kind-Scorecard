@@ -27,6 +27,7 @@ export interface Player {
 export interface PlayerScores {
   playerId: string;
   categories: CategoryScores;
+  fiveOfAKindBonusCount: number;
 }
 
 export interface PlayerTotals {
@@ -34,6 +35,7 @@ export interface PlayerTotals {
   upperBonus: number;
   upperTotal: number;
   lowerTotal: number;
+  fiveOfAKindBonus: number;
   grandTotal: number;
 }
 
@@ -48,6 +50,7 @@ export interface GameState {
 export type GameAction =
   | { type: 'START_GAME'; players: Player[] }
   | { type: 'SET_SCORE'; playerId: string; category: ScoreCategory; value: number }
+  | { type: 'ADD_FIVE_OF_A_KIND_BONUS'; playerId: string }
   | { type: 'RESET_GAME' };
 
 export interface ScoreEntryTarget {

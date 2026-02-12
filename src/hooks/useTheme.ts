@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'preact/hooks';
 
-export type ThemeId = 'dark-warm' | 'dark-cool' | 'dark-vibrant' | 'light-soft';
+export type ThemeId =
+  | 'dark-warm'
+  | 'dark-cool'
+  | 'dark-vibrant'
+  | 'light-soft'
+  | 'light-warm'
+  | 'light-cool';
 
 const THEME_KEY = 'five-of-a-kind-theme';
 const DEFAULT_THEME: ThemeId = 'dark-vibrant';
 
-export const THEMES: { id: ThemeId; label: string; preview: string }[] = [
-  { id: 'dark-warm',    label: 'Warm',    preview: '#d49e2e' },
-  { id: 'dark-cool',    label: 'Cool',    preview: '#0eb4b4' },
-  { id: 'dark-vibrant', label: 'Vibrant', preview: '#8b5cf6' },
-  { id: 'light-soft',   label: 'Light',   preview: '#f5f3f0' },
+export const THEMES: { id: ThemeId; label: string; bg: string; accent: string }[] = [
+  { id: 'dark-warm',    label: 'Warm',    bg: '#1a1710', accent: '#d49e2e' },
+  { id: 'dark-cool',    label: 'Cool',    bg: '#0f1a1d', accent: '#0eb4b4' },
+  { id: 'dark-vibrant', label: 'Vibrant', bg: '#1a1a2e', accent: '#8b5cf6' },
+  { id: 'light-warm',   label: 'Warm',    bg: '#faf7f2', accent: '#c48a1a' },
+  { id: 'light-cool',   label: 'Cool',    bg: '#f0f8f8', accent: '#0a9e9e' },
+  { id: 'light-soft',   label: 'Soft',    bg: '#f5f3f0', accent: '#7c5cbf' },
 ];
 
 export const THEME_COLORS: Record<ThemeId, string> = {
@@ -17,7 +25,13 @@ export const THEME_COLORS: Record<ThemeId, string> = {
   'dark-cool':    '#0f1a1d',
   'dark-vibrant': '#1a1a2e',
   'light-soft':   '#f5f3f0',
+  'light-warm':   '#faf7f2',
+  'light-cool':   '#f0f8f8',
 };
+
+export function isLightTheme(id: ThemeId): boolean {
+  return id.startsWith('light-');
+}
 
 function getStoredTheme(): ThemeId {
   try {

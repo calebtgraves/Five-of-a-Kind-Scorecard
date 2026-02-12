@@ -29,6 +29,7 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         scores: action.players.map((p) => ({
           playerId: p.id,
           categories: createEmptyScores(),
+          fiveOfAKindBonusCount: 0,
         })),
       };
 
@@ -51,6 +52,15 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
         scores: newScores,
         phase: allFilled ? 'gameOver' : 'playing',
       };
+    }
+
+    case 'ADD_FIVE_OF_A_KIND_BONUS': {
+      const newScores = state.scores.map((ps) => {
+        if (ps.playerId !== action.playerId) return ps;
+        if (ps.categories.fiveOfAKind !== 50) return ps;
+        return { ...ps, fiveOfAKindBonusCount: ps.fiveOfAKindBonusCount + 1 };
+      });
+      return { ...state, scores: newScores };
     }
 
     case 'RESET_GAME':
