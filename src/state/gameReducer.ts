@@ -65,5 +65,8 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
 
     case 'RESET_GAME':
       return initialGameState;
+
+    case 'RESTORE_STATE':
+      return action.state;
   }
 }

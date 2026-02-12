@@ -51,7 +51,8 @@ export type GameAction =
   | { type: 'START_GAME'; players: Player[] }
   | { type: 'SET_SCORE'; playerId: string; category: ScoreCategory; value: number }
   | { type: 'ADD_FIVE_OF_A_KIND_BONUS'; playerId: string }
-  | { type: 'RESET_GAME' };
+  | { type: 'RESET_GAME' }
+  | { type: 'RESTORE_STATE'; state: GameState };
 
 export interface ScoreEntryTarget {
   playerId: string;

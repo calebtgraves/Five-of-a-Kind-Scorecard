@@ -12,9 +12,14 @@ function pickRandom(arr: number[]): number {
 interface GameScreenProps {
   state: GameState;
   dispatch: (action: GameAction) => void;
+  onUndo: () => void;
+  canUndo: boolean;
+  undoHighlight: ScoreEntryTarget | null;
+  clearUndoHighlight: () => void;
+  onUndoAnimationStart: () => void;
 }
 
-export function GameScreen({ state, dispatch }: GameScreenProps) {
+export function GameScreen({ state, dispatch, onUndo, canUndo, undoHighlight, clearUndoHighlight, onUndoAnimationStart }: GameScreenProps) {
   const [entryTarget, setEntryTarget] = useState<ScoreEntryTarget | null>(null);
   const [bonusConfirmPlayerId, setBonusConfirmPlayerId] = useState<string | null>(null);
   const [bonusPlayerId, setBonusPlayerId] = useState<string | null>(null);
@@ -64,6 +69,16 @@ export function GameScreen({ state, dispatch }: GameScreenProps) {
       debugFill();
     }
   };
+
+  // Dismiss undo highlight on any tap (delayed so the undo button tap doesn't immediately clear)
+  useEffect(() => {
+    if (!undoHighlight) return;
+    const handler = () => {
+      setTimeout(() => clearUndoHighlight(), 0);
+    };
+    window.addEventListener('pointerdown', handler);
+    return () => window.removeEventListener('pointerdown', handler);
+  }, [undoHighlight, clearUndoHighlight]);
 
   const handleCellTap = (playerId: string, category: ScoreCategory) => {
     // If tapping Five-of-a-Kind that's already scored 50, start bonus flow
@@ -145,7 +160,24 @@ export function GameScreen({ state, dispatch }: GameScreenProps) {
         isGameOver={isGameOver}
         onCellTap={handleCellTap}
         bonusPlayerId={bonusPlayerId}
+        undoHighlight={undoHighlight}
+        onUndoAnimationStart={onUndoAnimationStart}
       />
+
+      {canUndo && (
+        <div class="flex justify-center mt-4">
+          <button
+            onClick={onUndo}
+            class="flex items-center gap-2 bg-control hover:bg-control-hover rounded-lg px-4 py-2 text-sm text-text-muted transition-colors cursor-pointer"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="1 4 1 10 7 10" />
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+            </svg>
+            Undo
+          </button>
+        </div>
+      )}
 
       {/* Normal score entry modal */}
       {entryTarget && categoryMeta && (

@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'preact/hooks';
 import { useState } from 'preact/hooks';
-import type { Player, PlayerScores, ScoreCategory } from '../types';
+import type { Player, PlayerScores, ScoreCategory, ScoreEntryTarget } from '../types';
 import { UPPER_CATEGORIES, LOWER_CATEGORIES } from '../constants';
 import { computeTotals, FIVE_OF_A_KIND_BONUS_VALUE } from '../state/computeTotals';
 import { ScoreCell } from './ScoreCell';
@@ -15,6 +15,8 @@ interface ScorecardProps {
   isGameOver: boolean;
   onCellTap: (playerId: string, category: ScoreCategory) => void;
   bonusPlayerId: string | null;
+  undoHighlight: ScoreEntryTarget | null;
+  onUndoAnimationStart?: () => void;
 }
 
 function ScoreTable({
@@ -24,6 +26,7 @@ function ScoreTable({
   isGameOver,
   onCellTap,
   bonusPlayerId,
+  undoTarget,
 }: {
   players: Player[];
   scores: PlayerScores[];
@@ -31,6 +34,7 @@ function ScoreTable({
   isGameOver: boolean;
   onCellTap: (playerId: string, category: ScoreCategory) => void;
   bonusPlayerId: string | null;
+  undoTarget: ScoreEntryTarget | null;
 }) {
   return (
     <table class={`border-collapse text-sm ${players.length > 1 ? 'w-full' : ''}`}>
@@ -45,7 +49,7 @@ function ScoreTable({
       <tbody>
         <SectionHeader label="Upper Section" playerCount={players.length} />
         {UPPER_CATEGORIES.map((cat) => (
-          <tr class="border-b border-border-subtle">
+          <tr class="border-b border-border-subtle" data-category={cat.key}>
             <td class={`${CAT_COL} py-3 sticky left-0 bg-surface z-10`}>
               <div>{cat.label}</div>
               <div class="text-xs text-text-muted">{cat.shortDescription}</div>
@@ -56,6 +60,7 @@ function ScoreTable({
                 onTap={() => onCellTap(players[i].id, cat.key)}
                 isGameOver={isGameOver}
                 highlighted={bonusPlayerId === players[i].id && ps.categories[cat.key] === null}
+                undoHighlighted={undoTarget?.playerId === players[i].id && undoTarget?.category === cat.key}
               />
             ))}
           </tr>
@@ -69,7 +74,7 @@ function ScoreTable({
           const isFiveOfAKind = cat.key === 'fiveOfAKind';
           return (
             <>
-              <tr class="border-b border-border-subtle">
+              <tr class="border-b border-border-subtle" data-category={cat.key}>
                 <td class={`${CAT_COL} py-3 sticky left-0 bg-surface z-10`}>
                   <div>{cat.label}</div>
                   <div class="text-xs text-text-muted">{cat.shortDescription}</div>
@@ -81,6 +86,7 @@ function ScoreTable({
                     isGameOver={isGameOver}
                     reTappable={isFiveOfAKind && ps.categories.fiveOfAKind === 50}
                     highlighted={bonusPlayerId === players[i].id && ps.categories[cat.key] === null}
+                    undoHighlighted={undoTarget?.playerId === players[i].id && undoTarget?.category === cat.key}
                   />
                 ))}
               </tr>
@@ -158,13 +164,15 @@ function useIsMobile() {
   return isMobile;
 }
 
-export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerId }: ScorecardProps) {
+export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerId, undoHighlight, onUndoAnimationStart }: ScorecardProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const scrollRaf = useRef(0);
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState(0);
+  const [undoAnimating, setUndoAnimating] = useState(false);
   const totals = scores.map((ps) => computeTotals(ps.categories, ps.fiveOfAKindBonusCount));
 
   const showTabs = isMobile && players.length > 1;
@@ -244,8 +252,49 @@ export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerI
     activeButton?.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }, [activeTab, showTabs]);
 
+  // Handle undo highlight: switch to correct player tab, scroll to row, then start animation
+  useEffect(() => {
+    if (!undoHighlight) {
+      setUndoAnimating(false);
+      return;
+    }
+
+    const playerIndex = players.findIndex((p) => p.id === undoHighlight.playerId);
+    if (playerIndex === -1) return;
+
+    // Switch tab if needed (mobile carousel)
+    let tabDelay = 0;
+    if (showTabs && playerIndex !== activeTab) {
+      setActiveTab(playerIndex);
+      scrollToTab(playerIndex);
+      tabDelay = 350; // wait for tab switch animation
+    }
+
+    const timer = setTimeout(() => {
+      // Scroll to the category row — scope query to the correct player's card in carousel mode
+      let row: Element | null = null;
+      if (showTabs && carouselRef.current) {
+        const playerCard = carouselRef.current.children[playerIndex];
+        row = playerCard?.querySelector(`tr[data-category="${undoHighlight.category}"]`) ?? null;
+      } else {
+        row = containerRef.current?.querySelector(`tr[data-category="${undoHighlight.category}"]`) ?? null;
+      }
+      row?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // Wait for scroll to settle, then start animation
+      setTimeout(() => {
+        setUndoAnimating(true);
+        onUndoAnimationStart?.();
+      }, 300);
+    }, tabDelay);
+
+    return () => clearTimeout(timer);
+  }, [undoHighlight]);
+
+  const undoTarget = undoAnimating ? undoHighlight : null;
+
   return (
-    <div>
+    <div ref={containerRef}>
       {showTabs && (
         <div class="sticky top-0 z-20 py-2 -mx-2 px-2 bg-bg">
           <div ref={tabsRef} class="flex gap-1 overflow-x-auto scrollbar-none">
@@ -286,6 +335,7 @@ export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerI
                   isGameOver={isGameOver}
                   onCellTap={onCellTap}
                   bonusPlayerId={bonusPlayerId}
+                  undoTarget={undoTarget}
                 />
               </div>
             </div>
@@ -301,6 +351,7 @@ export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerI
               isGameOver={isGameOver}
               onCellTap={onCellTap}
               bonusPlayerId={bonusPlayerId}
+              undoTarget={undoTarget}
             />
           </div>
         </div>

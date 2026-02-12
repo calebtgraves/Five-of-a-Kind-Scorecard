@@ -4,10 +4,18 @@ interface ScoreCellProps {
   isGameOver: boolean;
   reTappable?: boolean;
   highlighted?: boolean;
+  undoHighlighted?: boolean;
 }
 
-export function ScoreCell({ value, onTap, isGameOver, reTappable, highlighted }: ScoreCellProps) {
+export function ScoreCell({ value, onTap, isGameOver, reTappable, highlighted, undoHighlighted }: ScoreCellProps) {
   if (value !== null) {
+    if (undoHighlighted) {
+      return (
+        <td class="px-3 py-2 text-center font-mono undo-flash">
+          {value}
+        </td>
+      );
+    }
     if (reTappable && !isGameOver) {
       return (
         <td
