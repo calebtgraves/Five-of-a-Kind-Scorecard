@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  base: '/Five-of-a-Kind-Scorecard/',
   plugins: [
     preact(),
     tailwindcss(),
@@ -19,7 +20,7 @@ export default defineConfig({
         orientation: 'portrait',
         icons: [
           {
-            src: '/favicon.svg',
+            src: '/Five-of-a-Kind-Scorecard/favicon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any maskable',
