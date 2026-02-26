@@ -169,7 +169,9 @@ export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerI
   const carouselRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
-  const scrollRaf = useRef(0);
+  const userScrolling = useRef(false);
+  const touchEndTimer = useRef<ReturnType<typeof setTimeout>>();
+
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState(0);
   const [undoAnimating, setUndoAnimating] = useState(false);
@@ -222,24 +224,57 @@ export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerI
   const visiblePlayers = showTabs ? [players[activeTab]] : players;
   const visibleScores = showTabs ? [scores[activeTab]] : scores;
   const visibleTotals = showTabs ? [totals[activeTab]] : totals;
+
   const scrollToTab = (index: number) => {
     const el = carouselRef.current;
     if (!el) return;
     const width = el.getBoundingClientRect().width;
-    el.scrollTo({ left: width * index });
+    el.scrollLeft = width * index;
   };
 
-  const handleCarouselScroll = () => {
+  // Sync activeTab from carousel scroll position, but only for user-initiated swipes
+  useEffect(() => {
     const el = carouselRef.current;
-    if (!el) return;
-    if (scrollRaf.current) cancelAnimationFrame(scrollRaf.current);
-    scrollRaf.current = requestAnimationFrame(() => {
-      const width = el.getBoundingClientRect().width || 1;
-      const next = Math.round(el.scrollLeft / width);
-      if (next !== activeTab) setActiveTab(next);
-    });
-  };
+    if (!el || !showTabs) return;
 
+    let rafId = 0;
+
+    const onTouchStart = () => {
+      userScrolling.current = true;
+      clearTimeout(touchEndTimer.current);
+    };
+
+    const onTouchEnd = () => {
+      // Keep userScrolling true during the snap animation after finger lifts
+      clearTimeout(touchEndTimer.current);
+      touchEndTimer.current = setTimeout(() => {
+        userScrolling.current = false;
+      }, 500);
+    };
+
+    const onScroll = () => {
+      if (!userScrolling.current) return;
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        const width = el.getBoundingClientRect().width || 1;
+        const next = Math.round(el.scrollLeft / width);
+        setActiveTab(next);
+      });
+    };
+
+    el.addEventListener('touchstart', onTouchStart, { passive: true });
+    el.addEventListener('touchend', onTouchEnd, { passive: true });
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      el.removeEventListener('touchstart', onTouchStart);
+      el.removeEventListener('touchend', onTouchEnd);
+      el.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(rafId);
+      clearTimeout(touchEndTimer.current);
+    };
+  }, [showTabs]);
+
+  // Set initial carousel position
   useEffect(() => {
     if (!showTabs) return;
     scrollToTab(activeTab);
@@ -271,7 +306,6 @@ export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerI
     }
 
     const timer = setTimeout(() => {
-      // Scroll to the category row — scope query to the correct player's card in carousel mode
       let row: Element | null = null;
       if (showTabs && carouselRef.current) {
         const playerCard = carouselRef.current.children[playerIndex];
@@ -323,7 +357,6 @@ export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerI
         <div
           ref={carouselRef}
           class="flex overflow-x-auto scrollbar-none snap-x-mandatory"
-          onScroll={handleCarouselScroll}
         >
           {players.map((p, i) => (
             <div key={p.id} class="w-full flex-shrink-0 snap-start snap-stop px-2 box-border">

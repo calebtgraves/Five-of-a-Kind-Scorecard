@@ -28,6 +28,13 @@ export function ThemeSwitcher({ theme, setTheme }: ThemeSwitcherProps) {
 
   return (
     <div ref={containerRef} class="relative flex items-end">
+      {/* Invisible backdrop to close panel on outside tap */}
+      {open && (
+        <div
+          class="fixed inset-0 z-[-1]"
+          onClick={() => setOpen(false)}
+        />
+      )}
       {/* Toggle button (palette icon) */}
       <button
         onClick={() => setOpen((v) => !v)}
@@ -44,12 +51,12 @@ export function ThemeSwitcher({ theme, setTheme }: ThemeSwitcherProps) {
         </svg>
       </button>
 
-      {/* Slide-out panel (horizontal) */}
+      {/* Slide-out panel (vertical, upward) */}
       <div
-        class="flex items-center gap-2 ml-2 transition-all duration-300 ease-out"
+        class="absolute bottom-full left-0 mb-2 flex flex-col gap-2 transition-all duration-300 ease-out"
         style={{
           opacity: open ? 1 : 0,
-          transform: open ? 'translateX(0)' : 'translateX(-12px)',
+          transform: open ? 'translateY(0)' : 'translateY(12px)',
           pointerEvents: open ? 'auto' : 'none',
         }}
       >

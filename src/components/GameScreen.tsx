@@ -1,13 +1,9 @@
-import { useState, useEffect, useRef, useCallback } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import type { GameState, GameAction, ScoreEntryTarget, ScoreCategory } from '../types';
 import { CATEGORIES, BONUS_INVALID_CATEGORIES } from '../constants';
 import { Scorecard } from './Scorecard';
 import { ScoreEntryModal } from './ScoreEntryModal';
 import { GameOverBanner } from './GameOverBanner';
-
-function pickRandom(arr: number[]): number {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
 
 interface GameScreenProps {
   state: GameState;
@@ -23,52 +19,7 @@ export function GameScreen({ state, dispatch, onUndo, canUndo, undoHighlight, cl
   const [entryTarget, setEntryTarget] = useState<ScoreEntryTarget | null>(null);
   const [bonusConfirmPlayerId, setBonusConfirmPlayerId] = useState<string | null>(null);
   const [bonusPlayerId, setBonusPlayerId] = useState<string | null>(null);
-  const tapCount = useRef(0);
-  const tapTimer = useRef<ReturnType<typeof setTimeout>>();
-
   const isGameOver = state.phase === 'gameOver';
-
-  const debugFill = useCallback(() => {
-    const lastPlayer = state.players[state.players.length - 1];
-    for (const player of state.players) {
-      for (const cat of CATEGORIES) {
-        if (player.id === lastPlayer.id && cat.key === 'chance') continue;
-        const ps = state.scores.find((s) => s.playerId === player.id);
-        if (ps && ps.categories[cat.key] !== null) continue;
-        dispatch({
-          type: 'SET_SCORE',
-          playerId: player.id,
-          category: cat.key,
-          value: pickRandom(cat.validScores),
-        });
-      }
-    }
-  }, [state, dispatch]);
-
-  // Secret debug shortcut: Ctrl+Shift+F
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.shiftKey && e.key === 'F') {
-        e.preventDefault();
-        debugFill();
-      }
-    };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [debugFill]);
-
-  // Secret debug gesture: tap top area 5 times within 1 second
-  const handleTopTap = () => {
-    if (tapCount.current === 0) {
-      tapTimer.current = setTimeout(() => { tapCount.current = 0; }, 1000);
-    }
-    tapCount.current++;
-    if (tapCount.current >= 5) {
-      clearTimeout(tapTimer.current);
-      tapCount.current = 0;
-      debugFill();
-    }
-  };
 
   // Dismiss undo highlight on any tap (delayed so the undo button tap doesn't immediately clear)
   useEffect(() => {
@@ -155,9 +106,6 @@ export function GameScreen({ state, dispatch, onUndo, canUndo, undoHighlight, cl
       class="max-w-[98vw] sm:max-w-[90vw] mx-auto p-4"
       style={{ paddingTop: 'calc(1rem + env(safe-area-inset-top))' }}
     >
-      {/* Invisible tap target in top padding area */}
-      <div class="fixed top-0 left-0 right-0 h-10 z-30" onClick={handleTopTap} />
-
       {isGameOver && (
         <GameOverBanner
           players={state.players}
