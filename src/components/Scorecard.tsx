@@ -226,7 +226,7 @@ export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerI
     const el = carouselRef.current;
     if (!el) return;
     const width = el.getBoundingClientRect().width;
-    el.scrollTo({ left: width * index, behavior: 'smooth' });
+    el.scrollTo({ left: width * index });
   };
 
   const handleCarouselScroll = () => {
@@ -267,7 +267,7 @@ export function Scorecard({ players, scores, isGameOver, onCellTap, bonusPlayerI
     if (showTabs && playerIndex !== activeTab) {
       setActiveTab(playerIndex);
       scrollToTab(playerIndex);
-      tabDelay = 350; // wait for tab switch animation
+      tabDelay = 50; // brief delay for tab switch to render
     }
 
     const timer = setTimeout(() => {
