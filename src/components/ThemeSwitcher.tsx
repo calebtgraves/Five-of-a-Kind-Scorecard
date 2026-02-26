@@ -51,12 +51,12 @@ export function ThemeSwitcher({ theme, setTheme }: ThemeSwitcherProps) {
         </svg>
       </button>
 
-      {/* Slide-out panel (vertical, upward) */}
+      {/* Slide-out panel (horizontal) */}
       <div
-        class="absolute bottom-full left-0 mb-2 flex flex-col gap-2 transition-all duration-300 ease-out"
+        class="flex items-center gap-2 ml-2 transition-all duration-300 ease-out"
         style={{
           opacity: open ? 1 : 0,
-          transform: open ? 'translateY(0)' : 'translateY(12px)',
+          transform: open ? 'translateX(0)' : 'translateX(-12px)',
           pointerEvents: open ? 'auto' : 'none',
         }}
       >
